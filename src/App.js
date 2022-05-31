@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
+import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
-  TextInput,
   View,
   Dimensions,
   FlatList,
@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+import { HelperText, TextInput } from "react-native-paper";
 
 import GenderSlide from "./screens/GenderSlide";
 import AgeSlide from "./screens/AgeSlide";
@@ -19,8 +20,11 @@ import HeightSlide from "./screens/HeightSlide";
 import FrameSlide from "./screens/FrameSlide";
 import WeightSlide from "./screens/WeightSlide";
 import ResultSlide from "./screens/ResultSlide";
+import BottomNavigation from "./components/BottomNavigation";
+import GenderPicker from "./components/GenderPicker";
 
 const { width, height } = Dimensions.get("screen");
+// const _spacing = 10;
 
 let imagesData = [
   {
@@ -51,12 +55,25 @@ let imagesData = [
 ];
 
 export default function App() {
-  const [genderValue, setGenderValue] = useState();
-  const [ageValue, setAgeValue] = useState();
-  const [heightValue, setHeightValue] = useState();
-  const [frameValue, setFrameValue] = useState();
-  const [weightValue, setWeightValue] = useState();
-  const [idealWeight, setIdealWeight] = useState();
+  const [genderValue, setGenderValue] = useState("");
+  const [ageValue, setAgeValue] = useState("");
+  const [heightValue, setHeightValue] = useState("");
+  const [frameValue, setFrameValue] = useState("");
+  const [weightValue, setWeightValue] = useState("");
+  const [idealWeight, setIdealWeight] = useState("");
+  const ref = React.useRef(null);
+  const [index, setIndex] = React.useState(0);
+
+  const onChangeText = (genderValue) => setGenderValue(genderValue);
+  const [errorText, setErrorText] = useState();
+
+  // useEffect notices the change in state index, so changes the Flatlist's scrollToIndex
+  React.useEffect(() => {
+    ref.current?.scrollToIndex({
+      index,
+      animated: true,
+    });
+  }, [index]);
 
   const handleCalculate = () => {
     console.log("handleCalculate, genderValue:" + genderValue);
@@ -131,6 +148,81 @@ export default function App() {
     console.log("imagesData after RESULT add:" + JSON.stringify(imagesData));
   };
 
+  const leftPress = () => {
+    if (index === 0) {
+      return;
+    }
+    setIndex(index - 1);
+    console.log("index(prev):" + index);
+    setErrorText("");
+  };
+
+  const rightPress = () => {
+    if (index === imagesData.length - 1) {
+      return;
+    }
+    setIndex(index + 1);
+    setErrorText("");
+    console.log("index(next):" + index);
+  };
+
+  const validate = (title) => {
+    console.log("validatex(title):" + title);
+    switch (title) {
+      case "gender": {
+        if (genderValue === "") {
+          // they haven't selected anything
+          console.log("validatex(gender):" + genderValue);
+          setErrorText("Please select a gender");
+          return false;
+        }
+        break;
+      }
+      case "age": {
+        console.log("ageValue:" + ageValue);
+        if (ageValue === "") {
+          // they haven't selected anything
+          console.log("validatex(age):" + ageValue);
+          setErrorText("Please select an age");
+          return false;
+        }
+        break;
+      }
+      case "frame": {
+        if (frameValue === "") {
+          // they haven't selected anything
+          console.log("validatex(frame):" + genderValue);
+          setErrorText("Please select a frame size");
+          return false;
+        }
+        break;
+      }
+      case "weight": {
+        if (weightValue === "") {
+          // they haven't selected anything
+          console.log("validatex(weight):" + weightValue);
+          setErrorText("Please select a weight");
+          return false;
+        }
+        break;
+      }
+      case "height": {
+        if (heightValue === "") {
+          // they haven't selected anything
+          console.log("validatex(height):" + heightValue);
+          setErrorText("Please select a height");
+          return false;
+        }
+        break;
+      }
+      default: {
+        console.log("Unknown/unhandled value in switch statement");
+      }
+    }
+
+    return true;
+  };
+
   // **********  Gender  **********
   // **********  Age     **********
   // **********  Height  **********
@@ -152,6 +244,8 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar hidden />
       <Animated.FlatList
+        ref={ref}
+        initialScrollIndex={index}
         data={imagesData}
         keyExtractor={(item) => item.key}
         horizontal
@@ -181,24 +275,28 @@ export default function App() {
                         <GenderSlide
                           genderValue={genderValue}
                           setGenderValue={setGenderValue}
+                          errorText={errorText}
                         />
                       ),
                       age: (
                         <AgeSlide
                           ageValue={ageValue}
                           setAgeValue={setAgeValue}
+                          errorText={errorText}
                         />
                       ),
                       height: (
                         <HeightSlide
                           heightValue={heightValue}
                           setHeightValue={setHeightValue}
+                          errorText={errorText}
                         />
                       ),
                       frame: (
                         <FrameSlide
                           frameValue={frameValue}
                           setFrameValue={setFrameValue}
+                          errorText={errorText}
                         />
                       ),
                       weight: (
@@ -206,12 +304,20 @@ export default function App() {
                           frameValue={weightValue}
                           setWeightValue={setWeightValue}
                           handleCalculate={handleCalculate}
+                          errorText={errorText}
                         />
                       ),
                       result: <ResultSlide idealWeight={idealWeight} />,
                     }[item.title]
                   }
                 </View>
+                <BottomNavigation
+                  validate={validate}
+                  title={item.title}
+                  leftPress={leftPress}
+                  rightPress={rightPress}
+                  setErrorText={setErrorText}
+                />
               </ImageBackground>
             </View>
           );
@@ -225,7 +331,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "center",
   },
   inputContainer: {
