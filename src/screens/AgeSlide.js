@@ -1,6 +1,11 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import { HelperText } from "react-native-paper";
 
-const AgeSlide = ({ ageValue, setAgeValue }) => {
+const AgeSlide = ({ ageValue, setAgeValue, errorText }) => {
+  const hasErrors = () => {
+    return errorText !== "";
+  };
+
   return (
     <View>
       <Text style={styles.textText}>Enter Age</Text>
@@ -10,6 +15,11 @@ const AgeSlide = ({ ageValue, setAgeValue }) => {
           value={ageValue}
           onChangeText={setAgeValue}
         />
+      </View>
+      <View style={styles.textContainer}>
+        <HelperText type="error" visible={hasErrors()}>
+          {errorText}
+        </HelperText>
       </View>
     </View>
   );

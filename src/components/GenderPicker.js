@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text, RadioButton, Paragraph } from "react-native-paper";
+import { Text, RadioButton, Paragraph, HelperText } from "react-native-paper";
 
 const GenderPicker = ({ genderValue, setGenderValue }) => {
   return (

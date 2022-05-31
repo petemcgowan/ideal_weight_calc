@@ -1,12 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
-
+import { HelperText } from "react-native-paper";
 import FramePicker from "../components/FramePicker";
 
-const FrameSlide = ({ frameValue, setFrameValue }) => {
+const FrameSlide = ({ frameValue, setFrameValue, errorText }) => {
+  const hasErrors = () => {
+    return errorText !== "";
+  };
+
   return (
     <View>
       <Text style={styles.textText}>Select Frame</Text>
       <FramePicker frameValue={frameValue} setFrameValue={setFrameValue} />
+      <View style={styles.textContainer}>
+        <HelperText type="error" visible={hasErrors()}>
+          {errorText}
+        </HelperText>
+      </View>
     </View>
   );
 };
