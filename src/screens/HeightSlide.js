@@ -1,6 +1,11 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import { HelperText } from "react-native-paper";
 
-const HeightSlide = ({ heightValue, setHeightValue }) => {
+const HeightSlide = ({ heightValue, setHeightValue, errorText }) => {
+  const hasErrors = () => {
+    return errorText !== "";
+  };
+
   return (
     <View>
       <Text style={styles.textText}>Enter Height</Text>
@@ -10,6 +15,11 @@ const HeightSlide = ({ heightValue, setHeightValue }) => {
           value={heightValue}
           onChangeText={setHeightValue}
         />
+      </View>
+      <View style={styles.textContainer}>
+        <HelperText type="error" visible={hasErrors()}>
+          {errorText}
+        </HelperText>
       </View>
     </View>
   );

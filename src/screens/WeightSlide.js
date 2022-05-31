@@ -5,8 +5,23 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
+import { HelperText } from "react-native-paper";
 
-const WeightSlide = ({ weightValue, setWeightValue, handleCalculate }) => {
+const WeightSlide = ({
+  weightValue,
+  setWeightValue,
+  handleCalculate,
+  errorText,
+}) => {
+  const hasErrors = () => {
+    return errorText !== "";
+  };
+
+  const weightHasValue = () => {
+    console.log("weightValue:" + weightValue);
+    return weightValue !== "";
+  };
+
   return (
     <View>
       <Text style={styles.textText}>Enter Weight</Text>
@@ -17,7 +32,16 @@ const WeightSlide = ({ weightValue, setWeightValue, handleCalculate }) => {
           onChangeText={setWeightValue}
         />
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleCalculate}>
+      <View style={styles.textContainer}>
+        <HelperText type="error" visible={hasErrors()}>
+          {errorText}
+        </HelperText>
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleCalculate}
+        disabled={weightHasValue()}
+      >
         <Text style={styles.buttonText}>Calculate </Text>
       </TouchableOpacity>
     </View>
