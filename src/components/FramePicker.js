@@ -10,15 +10,15 @@ const FramePicker = ({ frameValue, setFrameValue }) => {
       style={styles.input}
     >
       <View style={styles.row}>
-        <Text>Small</Text>
+        <Text style={{ fontSize: 25, color: "#ffffff" }}>Small</Text>
         <RadioButton value="Small"></RadioButton>
       </View>
       <View style={styles.row}>
-        <Text>Medium</Text>
+        <Text style={{ fontSize: 25, color: "#ffffff" }}>Medium</Text>
         <RadioButton value="Medium"></RadioButton>
       </View>
       <View style={styles.row}>
-        <Text>Large</Text>
+        <Text style={{ fontSize: 25, color: "#ffffff" }}>Large</Text>
         <RadioButton value="Large"></RadioButton>
       </View>
     </RadioButton.Group>
@@ -28,8 +28,12 @@ const FramePicker = ({ frameValue, setFrameValue }) => {
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+
+    fontSize: 25,
+    padding: 8,
+    marginTop: 10,
+    // paddingVertical: 8,
+    // paddingHorizontal: 16,
   },
   input: {
     height: 70,
