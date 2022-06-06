@@ -12,7 +12,7 @@ const FrameSlide = ({ frameValue, setFrameValue, errorText }) => {
       <Text style={styles.textText}>Select Frame</Text>
       <FramePicker frameValue={frameValue} setFrameValue={setFrameValue} />
       <View style={styles.textContainer}>
-        <HelperText type="error" visible={hasErrors()}>
+        <HelperText style={{ fontSize: 25 }} type="error" visible={hasErrors()}>
           {errorText}
         </HelperText>
       </View>
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   textText: {
     alignSelf: "center",
     color: "#FFCB1F",
-    fontSize: 25,
+    fontSize: 35,
     fontWeight: "bold",
   },
 });

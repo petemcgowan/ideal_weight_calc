@@ -17,7 +17,7 @@ const GenderSlide = ({ genderValue, setGenderValue, errorText }) => {
       <Text style={styles.textText}>Select Gender</Text>
       <GenderPicker genderValue={genderValue} setGenderValue={setGenderValue} />
       <View style={styles.textContainer}>
-        <HelperText type="error" visible={hasErrors()}>
+        <HelperText style={{ fontSize: 25 }} type="error" visible={hasErrors()}>
           {errorText}
         </HelperText>
       </View>

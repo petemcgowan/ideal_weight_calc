@@ -17,7 +17,7 @@ const AgeSlide = ({ ageValue, setAgeValue, errorText }) => {
         />
       </View>
       <View style={styles.textContainer}>
-        <HelperText type="error" visible={hasErrors()}>
+        <HelperText style={{ fontSize: 25 }} type="error" visible={hasErrors()}>
           {errorText}
         </HelperText>
       </View>
@@ -27,20 +27,24 @@ const AgeSlide = ({ ageValue, setAgeValue, errorText }) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    borderLeftWidth: 4,
-    borderRightWidth: 4,
+    // borderLeftWidth: 4,
+    // borderRightWidth: 4,
+    alignSelf: "center",
     height: 70,
   },
   input: {
     height: 70,
     backgroundColor: "#222444",
-    paddingLeft: 15,
-    paddingRight: 15,
+    opacity: 0.4,
+    width: 70,
+    padding: 5,
+    // paddingRight: 15,
   },
   textText: {
-    alignSelf: "center",
+    // alignSelf: "center",
     color: "#FFCB1F",
     fontSize: 25,
+    width: 70,
     fontWeight: "bold",
   },
 });

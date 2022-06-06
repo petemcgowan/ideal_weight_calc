@@ -17,7 +17,7 @@ const HeightSlide = ({ heightValue, setHeightValue, errorText }) => {
         />
       </View>
       <View style={styles.textContainer}>
-        <HelperText type="error" visible={hasErrors()}>
+        <HelperText style={{ fontSize: 25 }} type="error" visible={hasErrors()}>
           {errorText}
         </HelperText>
       </View>
@@ -27,9 +27,10 @@ const HeightSlide = ({ heightValue, setHeightValue, errorText }) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    borderLeftWidth: 4,
-    borderRightWidth: 4,
+    // borderLeftWidth: 4,
+    // borderRightWidth: 4,
     height: 70,
+    alignSelf: "center",
   },
   textText: {
     alignSelf: "center",
@@ -37,14 +38,17 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
   },
+
   input: {
     height: 70,
-    backgroundColor: "#666666",
+    width: 70,
     color: "#FFCB1F",
-    fontSize: 15,
+    fontSize: 25,
+    backgroundColor: "#222444",
+    opacity: 0.4,
     // color: "#ffffff",
-    paddingLeft: 15,
-    paddingRight: 15,
+    padding: 5,
+    // paddingRight: 15,
   },
 });
 
