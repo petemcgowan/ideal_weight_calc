@@ -33,15 +33,11 @@ const WeightSlide = ({
         />
       </View>
       <View style={styles.textContainer}>
-        <HelperText type="error" visible={hasErrors()}>
+        <HelperText style={{ fontSize: 25 }} type="error" visible={hasErrors()}>
           {errorText}
         </HelperText>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleCalculate}
-        disabled={weightHasValue()}
-      >
+      <TouchableOpacity style={styles.button} onPress={handleCalculate}>
         <Text style={styles.buttonText}>Calculate </Text>
       </TouchableOpacity>
     </View>
@@ -50,13 +46,13 @@ const WeightSlide = ({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    borderLeftWidth: 4,
-    borderRightWidth: 4,
     height: 70,
   },
   input: {
     height: 70,
     backgroundColor: "#222444",
+    opacity: 0.4,
+    width: 120,
     fontSize: 25,
     paddingLeft: 15,
     paddingRight: 15,
@@ -70,6 +66,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#1D1D1B",
+    opacity: 0.4,
   },
   buttonText: {
     alignSelf: "center",
