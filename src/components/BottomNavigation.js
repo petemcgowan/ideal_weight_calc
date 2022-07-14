@@ -28,12 +28,14 @@ const BottomNavigation = ({
           <View
             style={{
               padding: _spacing,
-              backgroundColor: "#FCD259",
+              // backgroundColor: "#FCD259",
+              backgroundColor: "rgba(252, 210, 89, 0.6)",
+
               borderRadius: _spacing,
               marginRight: _spacing,
             }}
           >
-            <Feather name="arrow-left" size={24} color="#36303F" />
+            <Feather name="arrow-left" size={42} color="#36303F" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -49,11 +51,11 @@ const BottomNavigation = ({
           <View
             style={{
               padding: _spacing,
-              backgroundColor: "#FCD259",
+              backgroundColor: "rgba(252, 210, 89, 0.6)",
               borderRadius: _spacing,
             }}
           >
-            <Feather name="arrow-right" size={24} color="#36303F" />
+            <Feather name="arrow-right" size={42} color="#36303F" />
           </View>
         </TouchableOpacity>
       </View>

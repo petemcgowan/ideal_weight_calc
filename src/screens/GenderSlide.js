@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     minWidth: 150,
     fontSize: 25,
-    height: 25,
+    height: 35,
     // flex: 1,
     // backgroundColor: "#fff",
     // alignItems: "center",

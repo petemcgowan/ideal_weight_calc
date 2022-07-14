@@ -3,6 +3,10 @@ import { StyleSheet, View } from "react-native";
 import { Text, RadioButton, Paragraph } from "react-native-paper";
 
 const GenderPicker = ({ genderValue, setGenderValue }) => {
+  // const genderPress = () => {
+  //   setGenderValue();
+  //   console.log("genderPress");
+  // };
   return (
     <RadioButton.Group onValueChange={setGenderValue} value={genderValue}>
       <View style={styles.row}>
