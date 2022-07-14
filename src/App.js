@@ -1,8 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import ImageColors from "react-native-image-colors";
+
 import {
   StyleSheet,
   Text,
@@ -16,8 +18,9 @@ import {
   ImageBackground,
 } from "react-native";
 import { HelperText, TextInput } from "react-native-paper";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import ColourContext, { ColourProvider } from "./state/ColourContext";
 
+import IntroSlide from "./screens/IntroSlide";
 import GenderSlide from "./screens/GenderSlide";
 import AgeSlide from "./screens/AgeSlide";
 import HeightSlide from "./screens/HeightSlide";
@@ -38,33 +41,73 @@ const DOT_INDICATOR_SIZE = DOT_SIZE + DOT_SPACING;
 let imagesData = [
   {
     key: 1,
-    title: "gender",
-    image: require("../assets/beach-footsteps-small.jpg"),
+    title: "intro",
+    image: require("../assets/beach-umbrella-colony-small.jpg"),
+    dominant: "#345b5d",
+    vibrant: "#b48143",
+    darkVibrant: "#197773",
+    lightVibrant: "#83cace",
+    lightMuted: "#d0bbac",
   },
   {
     key: 2,
-    title: "age",
-    image: require("../assets/beach-solo-running-sand-small.jpg"),
+    title: "gender",
+    image: require("../assets/beach-footsteps-small.jpg"),
+    dominant: "#694a2f",
+    vibrant: "#b27f52",
+    darkVibrant: "#5b4028",
+    lightVibrant: "#e4bc94",
+    lightMuted: "#d4beaf",
   },
   {
     key: 3,
-    title: "height",
-    image: require("../assets/beach-triangle-palms-small.jpg"),
+    title: "age",
+    image: require("../assets/beach-solo-running-sand-small.jpg"),
+    dominant: "#385a69",
+    vibrant: "#16739a",
+    darkVibrant: "#166f8c",
+    lightVibrant: "#84c4ec",
+    lightMuted: "#c4bab9",
   },
   {
     key: 4,
-    title: "frame",
-    image: require("../assets/beach-multi-palm-trees-argh-small.jpg"),
+    title: "height",
+    image: require("../assets/beach-triangle-palms-small.jpg"),
+    dominant: "#4a472a",
+    vibrant: "#04839c",
+    darkVibrant: "#046c81",
+    lightVibrant: "#7de6fb",
+    lightMuted: "#c6baae",
   },
   {
     key: 5,
-    title: "weight",
-    image: require("../assets/beach-white-sands-oh-so-ronery-small.jpg"),
+    title: "frame",
+    image: require("../assets/beach-multi-palm-trees-argh-small.jpg"),
+    dominant: "#384d43",
+    vibrant: "#56a2bb",
+    darkVibrant: "#3389a4",
+    lightVibrant: "#ddb583",
+    lightMuted: "#aac8d0",
   },
   {
     key: 6,
+    title: "weight",
+    image: require("../assets/beach-white-sands-oh-so-ronery-small.jpg"),
+    dominant: "#404239",
+    vibrant: "#058db1",
+    darkVibrant: "#056478",
+    lightVibrant: "#8ac4e4",
+    lightMuted: "#9cb7cb",
+  },
+  {
+    key: 7,
     title: "result",
     image: require("../assets/blue-palm-trees-small.jpg"),
+    dominant: "#784b3c",
+    vibrant: "#d27e38",
+    darkVibrant: "#173f6a",
+    lightVibrant: "#efa450",
+    lightMuted: "#d0b99f",
   },
 ];
 
@@ -80,11 +123,23 @@ export default function App() {
   const [helpText, setHelpText] = useState("");
   const refFlatList = React.useRef(null);
   const [index, setIndex] = React.useState(0);
+  const [loading, setLoading] = useState(true);
+  const [dominantColour, setDominantColour] = useState(
+    imagesData[index].dominant
+  );
+  const [lightMutedColour, setLightMutedColour] = useState(
+    imagesData[index].lightMuted
+  );
 
   const onChangeText = (genderValue) => setGenderValue(genderValue);
   const [errorText, setErrorText] = useState();
 
   const helpSlideValues = [
+    {
+      title: "Info",
+      subHeading: "Welcome",
+      text: `Find related info on the screen you're on here 😎 `,
+    },
     {
       title: "Info",
       subHeading: "Gender",
@@ -158,21 +213,69 @@ export default function App() {
     },
   ];
 
+  const value = useMemo(
+    () => ({
+      dominantColour,
+      lightMutedColour,
+    }),
+    [index, dominantColour, lightMutedColour]
+  );
+
+  console.log("App Render");
   // useEffect notices the change in state index, so changes the Flatlist's scrollToIndex
-  React.useEffect(() => {
-    console.log(
-      "useEffect, about to scrollToIndex, refFlatListL:" +
-        refFlatList.viewableItems
-    );
-    console.log(
-      "useEffect, about to scrollToIndex, refFlatListL:" +
-        refFlatList.current.viewableItems
-    );
+  useEffect(() => {
     refFlatList.current?.scrollToIndex({
       index,
       animated: true,
     });
+
+    // const fetchColors = async () => {
+    //   const result = await ImageColors.getColors(imagesData[index], {
+    //     fallback: "#000000",
+    //     quality: "low",
+    //     pixelSpacing: 5,
+    //     cache: true,
+    //     headers: {
+    //       authorization: "Basic 123",
+    //     },
+    //   });
+
+    // switch (result.platform) {
+    //   case "android":
+    //   case "web":
+    //     setColors({
+    //       colorOne: { value: result.lightVibrant, name: "lightVibrant" },
+    //       colorTwo: { value: result.dominant, name: "dominant" },
+    //       colorThree: { value: result.vibrant, name: "vibrant" },
+    //       colorFour: { value: result.darkVibrant, name: "darkVibrant" },
+    //       rawResult: JSON.stringify(result),
+    //     });
+    //     break;
+    //   case "ios":
+    //     setColors({
+    //       colorOne: { value: result.background, name: "background" },
+    //       colorTwo: { value: result.detail, name: "detail" },
+    //       colorThree: { value: result.primary, name: "primary" },
+    //       colorFour: { value: result.secondary, name: "secondary" },
+    //       rawResult: JSON.stringify(result),
+    //     });
+    //     break;
+    //   default:
+    //     throw new Error("Unexpected platform");
+    // }
+
+    // setLoading(false);
+    // };
+
+    // fetchColors();
   }, [index]);
+  // if (loading) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.loading}>Loading...</Text>
+  //     </View>
+  //   );
+  // }
 
   const handleCalculate = () => {
     const weightIsValidated = validate("weight");
@@ -234,8 +337,6 @@ export default function App() {
 
       setIdealWeight(idealWeightInt);
       setIndex(index + 1); // move to the results slide
-
-      console.log("imagesData after RESULT add:" + JSON.stringify(imagesData));
     } // weight entry validation
   };
 
@@ -249,6 +350,10 @@ export default function App() {
     console.log("helpSlideValues:" + JSON.stringify(helpSlideValues));
 
     setIndex(index - 1);
+    console.log("imagesData[index].dominant):" + imagesData[index].dominant);
+    setDominantColour(imagesData[index].dominant);
+    setLightMutedColour(imagesData[index].lightMuted);
+
     console.log("index(prev):" + index);
 
     setErrorText("");
@@ -264,6 +369,9 @@ export default function App() {
     console.log("helpSlideValues:" + JSON.stringify(helpSlideValues));
 
     setIndex(index + 1);
+    setDominantColour(imagesData[index].dominant);
+    setLightMutedColour(imagesData[index].lightMuted);
+    console.log("imagesData[index].dominant):" + imagesData[index].dominant);
     console.log("index(next):" + index);
 
     setErrorText("");
@@ -327,145 +435,164 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar />
-      <Animated.FlatList
-        ref={refFlatList}
-        initialScrollIndex={index}
-        data={imagesData}
-        keyExtractor={(item) => item.key}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        bounces={false}
-        renderItem={({ item }) => {
-          return (
-            <View
-              style={{ width, height }}
-              onTouchStart={(e) => (this.touchX = e.nativeEvent.pageX)}
-              onTouchEnd={(e) => {
-                if (this.touchX - e.nativeEvent.pageX > 210) {
-                  console.log(
-                    "Swiped left" +
-                      this.touchX +
-                      ", e.nativeEvent.pageX:" +
-                      e.nativeEvent.pageX +
-                      ", subtracted:" +
-                      (this.touchX - e.nativeEvent.pageX)
-                  );
-
-                  const result = validate(item.title); // did they enter relevant info?
-                  console.log("result:" + result + ", item.title" + item.title);
-                  console.log("index" + index);
-                  if (result) {
-                    // entry is good
-                    console.log("rightPress it's good");
-                    rightPress();
-                  } else {
-                    refFlatList.current?.scrollToIndex({
-                      index,
-                      animated: true,
-                    }); // setIndex(index);
+    <ColourProvider value={value}>
+      <View style={styles.container}>
+        <StatusBar />
+        <Animated.FlatList
+          ref={refFlatList}
+          initialScrollIndex={index}
+          data={imagesData}
+          keyExtractor={(item) => item.key}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          bounces={false}
+          renderItem={({ item }) => {
+            return (
+              <View
+                style={{ width, height }}
+                onTouchStart={(e) => {
+                  console.log("onTouchStart, e:" + e + ", this:" + this);
+                  if (this && e) {
+                    this.touchX = e.nativeEvent.pageX;
                   }
-                }
-                if (this.touchX - e.nativeEvent.pageX < -210) leftPress();
-                console.log(
-                  "Swiped right, this.touchX" +
-                    this.touchX +
-                    ", e.nativeEvent.pageX:" +
-                    e.nativeEvent.pageX +
-                    ", subtracted:" +
-                    (this.touchX - e.nativeEvent.pageX)
-                );
-              }}
-            >
-              <ImageBackground
-                // source={{ uri: item.image }}
-                source={item.image}
-                style={{ flex: 1, resizeMode: "cover" }}
+                }}
+                onTouchEnd={(e) => {
+                  console.log;
+                  if (this && e) {
+                    // check for undefined
+                    if (this.touchX - e.nativeEvent.pageX > 210) {
+                      console.log(
+                        "Swiped left" +
+                          this.touchX +
+                          ", e.nativeEvent.pageX:" +
+                          e.nativeEvent.pageX +
+                          ", subtracted:" +
+                          (this.touchX - e.nativeEvent.pageX)
+                      );
+
+                      const result = validate(item.title); // did they enter relevant info?
+                      console.log(
+                        "result:" + result + ", item.title" + item.title
+                      );
+                      console.log("index" + index);
+                      if (result) {
+                        // entry is good
+                        console.log("rightPress it's good");
+                        rightPress();
+                      } else {
+                        refFlatList.current?.scrollToIndex({
+                          index,
+                          animated: true,
+                        }); // setIndex(index);
+                      }
+                    }
+                    if (this.touchX - e.nativeEvent.pageX < -210) leftPress();
+                    console.log(
+                      "Swiped right, this.touchX" +
+                        this.touchX +
+                        ", e.nativeEvent.pageX:" +
+                        e.nativeEvent.pageX +
+                        ", subtracted:" +
+                        (this.touchX - e.nativeEvent.pageX)
+                    );
+                  }
+                }}
               >
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
+                <ImageBackground
+                  // source={{ uri: item.image }}
+                  source={item.image}
+                  style={{ flex: 1, resizeMode: "cover" }}
                 >
-                  {/* ************************************* */}
-                  {
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    {/* ************************************* */}
                     {
-                      gender: (
-                        <View>
-                          <GenderSlide
-                            genderValue={genderValue}
-                            setGenderValue={setGenderValue}
+                      {
+                        intro: (
+                          <View>
+                            <IntroSlide />
+                          </View>
+                        ),
+                        gender: (
+                          <View>
+                            <GenderSlide
+                              genderValue={genderValue}
+                              setGenderValue={setGenderValue}
+                              errorText={errorText}
+                            />
+                          </View>
+                        ),
+                        age: (
+                          <AgeSlide
+                            ageValue={ageValue}
+                            setAgeValue={setAgeValue}
                             errorText={errorText}
                           />
-                        </View>
-                      ),
-                      age: (
-                        <AgeSlide
-                          ageValue={ageValue}
-                          setAgeValue={setAgeValue}
-                          errorText={errorText}
-                        />
-                      ),
-                      height: (
-                        <HeightSlide
-                          heightValue={heightValue}
-                          setHeightValue={setHeightValue}
-                          errorText={errorText}
-                        />
-                      ),
-                      frame: (
-                        <FrameSlide
-                          frameValue={frameValue}
-                          setFrameValue={setFrameValue}
-                          errorText={errorText}
-                        />
-                      ),
-                      weight: (
-                        <WeightSlide
-                          weightValue={weightValue}
-                          setWeightValue={setWeightValue}
-                          handleCalculate={handleCalculate}
-                          errorText={errorText}
-                        />
-                      ),
-                      result: (
-                        <ResultSlide
-                          genderValue={genderValue}
-                          frameValue={frameValue}
-                          weightValue={weightValue}
-                          heightValue={heightValue}
-                          ageValue={ageValue}
-                          idealWeight={idealWeight}
-                        />
-                      ),
-                    }[item.title]
-                  }
-                  {/* ************************************* */}
-                </View>
-                <BottomHelp
-                  helpTitle={helpSlideValues[index].title}
-                  helpSubHeading={helpSlideValues[index].subHeading}
-                  helpText={helpSlideValues[index].text}
-                ></BottomHelp>
+                        ),
+                        height: (
+                          <HeightSlide
+                            heightValue={heightValue}
+                            setHeightValue={setHeightValue}
+                            errorText={errorText}
+                          />
+                        ),
+                        frame: (
+                          <FrameSlide
+                            frameValue={frameValue}
+                            setFrameValue={setFrameValue}
+                            errorText={errorText}
+                          />
+                        ),
+                        weight: (
+                          <WeightSlide
+                            weightValue={weightValue}
+                            setWeightValue={setWeightValue}
+                            handleCalculate={handleCalculate}
+                            errorText={errorText}
+                          />
+                        ),
+                        result: (
+                          <ResultSlide
+                            genderValue={genderValue}
+                            frameValue={frameValue}
+                            weightValue={weightValue}
+                            heightValue={heightValue}
+                            ageValue={ageValue}
+                            idealWeight={idealWeight}
+                          />
+                        ),
+                      }[item.title]
+                    }
+                    {/* ************************************* */}
+                  </View>
+                  <BottomHelp
+                    helpTitle={helpSlideValues[index].title}
+                    helpSubHeading={helpSlideValues[index].subHeading}
+                    helpText={helpSlideValues[index].text}
+                    helpBackgroundColour={helpSlideValues[index].lightMuted}
+                  ></BottomHelp>
 
-                <BottomNavigation
-                  validate={validate}
-                  title={item.title}
-                  leftPress={leftPress}
-                  rightPress={rightPress}
-                  setErrorText={setErrorText}
-                />
-              </ImageBackground>
-            </View>
-          );
-        }}
-      />
-    </View>
+                  <BottomNavigation
+                    validate={validate}
+                    title={item.title}
+                    leftPress={leftPress}
+                    rightPress={rightPress}
+                    setErrorText={setErrorText}
+                  />
+                </ImageBackground>
+              </View>
+            );
+          }}
+        />
+      </View>
+    </ColourProvider>
   );
 }
 
