@@ -1,5 +1,5 @@
 {
-  "name": "rn_flatlist_wizard_poc",
+  "name": "ideal_weight_calc",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,10 @@
     "react-native-web": "0.17.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "typescript": "~4.3.5",
+    "@types/react": "~17.0.21",
+    "@types/react-native": "~0.67.6"
   },
   "private": true
 }
