@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import ImageColors from "react-native-image-colors";
@@ -38,85 +38,14 @@ const DOT_SIZE = 8;
 const DOT_SPACING = 8;
 const DOT_INDICATOR_SIZE = DOT_SIZE + DOT_SPACING;
 
-let imagesData = [
-  {
-    key: 1,
-    title: "intro",
-    image: require("../assets/beach-umbrella-colony-small.jpg"),
-    dominant: "#345b5d",
-    vibrant: "#b48143",
-    darkVibrant: "#197773",
-    lightVibrant: "#83cace",
-    lightMuted: "#d0bbac",
-  },
-  {
-    key: 2,
-    title: "gender",
-    image: require("../assets/beach-footsteps-small.jpg"),
-    dominant: "#694a2f",
-    vibrant: "#b27f52",
-    darkVibrant: "#5b4028",
-    lightVibrant: "#e4bc94",
-    lightMuted: "#d4beaf",
-  },
-  {
-    key: 3,
-    title: "age",
-    image: require("../assets/beach-solo-running-sand-small.jpg"),
-    dominant: "#385a69",
-    vibrant: "#16739a",
-    darkVibrant: "#166f8c",
-    lightVibrant: "#84c4ec",
-    lightMuted: "#c4bab9",
-  },
-  {
-    key: 4,
-    title: "height",
-    image: require("../assets/beach-triangle-palms-small.jpg"),
-    dominant: "#4a472a",
-    vibrant: "#04839c",
-    darkVibrant: "#046c81",
-    lightVibrant: "#7de6fb",
-    lightMuted: "#c6baae",
-  },
-  {
-    key: 5,
-    title: "frame",
-    image: require("../assets/beach-multi-palm-trees-argh-small.jpg"),
-    dominant: "#384d43",
-    vibrant: "#56a2bb",
-    darkVibrant: "#3389a4",
-    lightVibrant: "#ddb583",
-    lightMuted: "#aac8d0",
-  },
-  {
-    key: 6,
-    title: "weight",
-    image: require("../assets/beach-white-sands-oh-so-ronery-small.jpg"),
-    dominant: "#404239",
-    vibrant: "#058db1",
-    darkVibrant: "#056478",
-    lightVibrant: "#8ac4e4",
-    lightMuted: "#9cb7cb",
-  },
-  {
-    key: 7,
-    title: "result",
-    image: require("../assets/blue-palm-trees-small.jpg"),
-    dominant: "#784b3c",
-    vibrant: "#d27e38",
-    darkVibrant: "#173f6a",
-    lightVibrant: "#efa450",
-    lightMuted: "#d0b99f",
-  },
-];
+// const colourData =
 
 export default function App() {
   const [genderValue, setGenderValue] = useState("");
-  const [ageValue, setAgeValue] = useState("");
-  const [heightValue, setHeightValue] = useState("");
+  const [ageValue, setAgeValue] = useState("28");
+  const [heightValue, setHeightValue] = useState("174");
   const [frameValue, setFrameValue] = useState("");
-  const [weightValue, setWeightValue] = useState("");
+  const [weightValue, setWeightValue] = useState("165");
   const [idealWeight, setIdealWeight] = useState("");
   const [helpTitle, setHelpTitle] = useState("");
   const [helpSubHeading, setHelpSubHeading] = useState("");
@@ -124,12 +53,18 @@ export default function App() {
   const refFlatList = React.useRef(null);
   const [index, setIndex] = React.useState(0);
   const [loading, setLoading] = useState(true);
-  const [dominantColour, setDominantColour] = useState(
-    imagesData[index].dominant
-  );
-  const [lightMutedColour, setLightMutedColour] = useState(
-    imagesData[index].lightMuted
-  );
+  const { colourData } = useContext(ColourContext);
+
+  // const [dominantColour, setDominantColour] = useState(
+  //   colourData[index].dominant
+  // );
+  // const [lightMutedColour, setLightMutedColour] = useState(
+  //   colourData[index].lightMuted
+  // );
+  // const [lightVibrantColour, setLightVibrantColour] = useState(
+  //   colourData[index].lightVibrant
+  // );
+  // const [darkVibrant, setDarkVibrant] = useState(colourData[index].darkVibrant);
 
   const onChangeText = (genderValue) => setGenderValue(genderValue);
   const [errorText, setErrorText] = useState();
@@ -147,18 +82,18 @@ export default function App() {
 
       This is because the male body generally has higher muscle mass, and muscle is heavier than fat.
 
-      Not only that, but women generally have lower bone density.
+      * Women generally have lower bone density.
 
-      Last but not least, males tend to be taller than females.`,
+      * Last but not least, males tend to be taller than females.`,
     },
     {
       title: "Info",
       subHeading: "Age",
-      text: `In theory, age shouldn't be a large determinant of an IBW past the ages of 14-15 for girls and 16-17 for boys, after which most people stop growing.
+      text: `In theory, age shouldn't be a large determinant of an ideal body weight past the ages of 14-15 for girls and 16-17 for boys, after which most people stop growing.
 
-      It is actually expected that human males and females to lose 1.5 and 2 inches in height respectively by age 70. It is important to remember that as people age, lean muscle mass decreases and it is easier to accumulate excess body fat.
+      It is actually expected that human males and females to lose 1.5 and 2 inches in height respectively by age 70.
 
-      This is a natural process, though it is possible to lessen the effects of aging by adopting various habits such as monitoring diet, exercise, stress, and sleep.`,
+      It is possible to remove the effects of aging by adopting various habits such as monitoring diet, exercise, stress, supplementation and sleep.`,
     },
     {
       title: "Info",
@@ -213,69 +148,37 @@ export default function App() {
     },
   ];
 
+  // TODO put this back when the Colour Context works throughout
   const value = useMemo(
     () => ({
-      dominantColour,
-      lightMutedColour,
+      // dominantColour,
+      // lightMutedColour,
+      // lightVibrantColour,
+      // darkVibrant,
+      colourData,
+      index,
     }),
-    [index, dominantColour, lightMutedColour]
+    [index]
   );
+
+  // const value = {
+  //   dominantColour,
+  //   lightMutedColour,
+  //   lightVibrantColour,
+  //   darkVibrant,
+  //   colourData,
+  //   index,
+  // };
 
   console.log("App Render");
   // useEffect notices the change in state index, so changes the Flatlist's scrollToIndex
   useEffect(() => {
+    console.log("App useEffect");
     refFlatList.current?.scrollToIndex({
       index,
       animated: true,
     });
-
-    // const fetchColors = async () => {
-    //   const result = await ImageColors.getColors(imagesData[index], {
-    //     fallback: "#000000",
-    //     quality: "low",
-    //     pixelSpacing: 5,
-    //     cache: true,
-    //     headers: {
-    //       authorization: "Basic 123",
-    //     },
-    //   });
-
-    // switch (result.platform) {
-    //   case "android":
-    //   case "web":
-    //     setColors({
-    //       colorOne: { value: result.lightVibrant, name: "lightVibrant" },
-    //       colorTwo: { value: result.dominant, name: "dominant" },
-    //       colorThree: { value: result.vibrant, name: "vibrant" },
-    //       colorFour: { value: result.darkVibrant, name: "darkVibrant" },
-    //       rawResult: JSON.stringify(result),
-    //     });
-    //     break;
-    //   case "ios":
-    //     setColors({
-    //       colorOne: { value: result.background, name: "background" },
-    //       colorTwo: { value: result.detail, name: "detail" },
-    //       colorThree: { value: result.primary, name: "primary" },
-    //       colorFour: { value: result.secondary, name: "secondary" },
-    //       rawResult: JSON.stringify(result),
-    //     });
-    //     break;
-    //   default:
-    //     throw new Error("Unexpected platform");
-    // }
-
-    // setLoading(false);
-    // };
-
-    // fetchColors();
   }, [index]);
-  // if (loading) {
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text style={styles.loading}>Loading...</Text>
-  //     </View>
-  //   );
-  // }
 
   const handleCalculate = () => {
     const weightIsValidated = validate("weight");
@@ -289,7 +192,7 @@ export default function App() {
       console.log("handleCalculate, weightValue:" + weightValue);
 
       console.log(
-        "imagesData before (possible) filter:" + JSON.stringify(imagesData)
+        "colourData before (possible) filter:" + JSON.stringify(colourData)
       );
 
       // D. R. Miller Formula (1983)
@@ -347,12 +250,9 @@ export default function App() {
     setHelpTitle(helpSlideValues[index - 1].title);
     setHelpSubHeading(helpSlideValues[index - 1].subHeading);
     setHelpText(helpSlideValues[index - 1].text);
-    console.log("helpSlideValues:" + JSON.stringify(helpSlideValues));
 
     setIndex(index - 1);
-    console.log("imagesData[index].dominant):" + imagesData[index].dominant);
-    setDominantColour(imagesData[index].dominant);
-    setLightMutedColour(imagesData[index].lightMuted);
+    console.log("colourData[index].dominant):" + colourData[index].dominant);
 
     console.log("index(prev):" + index);
 
@@ -360,19 +260,15 @@ export default function App() {
   };
 
   const rightPress = () => {
-    if (index === imagesData.length - 1) {
+    if (index === colourData.length - 1) {
       return;
     }
     setHelpTitle(helpSlideValues[index + 1].title);
     setHelpSubHeading(helpSlideValues[index + 1].subHeading);
     setHelpText(helpSlideValues[index + 1].text);
-    console.log("helpSlideValues:" + JSON.stringify(helpSlideValues));
 
     setIndex(index + 1);
-    setDominantColour(imagesData[index].dominant);
-    setLightMutedColour(imagesData[index].lightMuted);
-    console.log("imagesData[index].dominant):" + imagesData[index].dominant);
-    console.log("index(next):" + index);
+    console.log("colourData[index].dominant):" + colourData[index].dominant);
 
     setErrorText("");
   };
@@ -394,7 +290,7 @@ export default function App() {
         if (ageValue === "") {
           // they haven't selected anything
           console.log("validatex(age):" + ageValue);
-          setErrorText("Please select an age");
+          setErrorText("Please enter an age");
           return false;
         }
         break;
@@ -412,7 +308,7 @@ export default function App() {
         if (weightValue === "") {
           // they haven't selected anything
           console.log("validatex(weight):" + weightValue);
-          setErrorText("Please select a weight");
+          setErrorText("Please enter a weight");
           return false;
         }
         break;
@@ -421,7 +317,7 @@ export default function App() {
         if (heightValue === "") {
           // they haven't selected anything
           console.log("validatex(height):" + heightValue);
-          setErrorText("Please select a height");
+          setErrorText("Please enter a height");
           return false;
         }
         break;
@@ -441,7 +337,7 @@ export default function App() {
         <Animated.FlatList
           ref={refFlatList}
           initialScrollIndex={index}
-          data={imagesData}
+          data={colourData}
           keyExtractor={(item) => item.key}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -452,24 +348,23 @@ export default function App() {
               <View
                 style={{ width, height }}
                 onTouchStart={(e) => {
-                  console.log("onTouchStart, e:" + e + ", this:" + this);
+                  // console.log("onTouchStart, e:" + e + ", this:" + this);
                   if (this && e) {
                     this.touchX = e.nativeEvent.pageX;
                   }
                 }}
                 onTouchEnd={(e) => {
-                  console.log;
                   if (this && e) {
                     // check for undefined
                     if (this.touchX - e.nativeEvent.pageX > 210) {
-                      console.log(
-                        "Swiped left" +
-                          this.touchX +
-                          ", e.nativeEvent.pageX:" +
-                          e.nativeEvent.pageX +
-                          ", subtracted:" +
-                          (this.touchX - e.nativeEvent.pageX)
-                      );
+                      // console.log(
+                      //   "Swiped left" +
+                      //     this.touchX +
+                      //     ", e.nativeEvent.pageX:" +
+                      //     e.nativeEvent.pageX +
+                      //     ", subtracted:" +
+                      //     (this.touchX - e.nativeEvent.pageX)
+                      // );
 
                       const result = validate(item.title); // did they enter relevant info?
                       console.log(
@@ -488,14 +383,14 @@ export default function App() {
                       }
                     }
                     if (this.touchX - e.nativeEvent.pageX < -210) leftPress();
-                    console.log(
-                      "Swiped right, this.touchX" +
-                        this.touchX +
-                        ", e.nativeEvent.pageX:" +
-                        e.nativeEvent.pageX +
-                        ", subtracted:" +
-                        (this.touchX - e.nativeEvent.pageX)
-                    );
+                    // console.log(
+                    //   "Swiped right, this.touchX" +
+                    //     this.touchX +
+                    //     ", e.nativeEvent.pageX:" +
+                    //     e.nativeEvent.pageX +
+                    //     ", subtracted:" +
+                    //     (this.touchX - e.nativeEvent.pageX)
+                    // );
                   }
                 }}
               >
@@ -526,58 +421,70 @@ export default function App() {
                               genderValue={genderValue}
                               setGenderValue={setGenderValue}
                               errorText={errorText}
+                              helpTitle={helpSlideValues[index].title}
+                              helpSubHeading={helpSlideValues[index].subHeading}
+                              helpText={helpSlideValues[index].text}
                             />
                           </View>
                         ),
                         age: (
-                          <AgeSlide
-                            ageValue={ageValue}
-                            setAgeValue={setAgeValue}
-                            errorText={errorText}
-                          />
+                          <View>
+                            <AgeSlide
+                              ageValue={ageValue}
+                              setAgeValue={setAgeValue}
+                              errorText={errorText}
+                            />
+                          </View>
                         ),
                         height: (
-                          <HeightSlide
-                            heightValue={heightValue}
-                            setHeightValue={setHeightValue}
-                            errorText={errorText}
-                          />
+                          <View>
+                            <HeightSlide
+                              heightValue={heightValue}
+                              setHeightValue={setHeightValue}
+                              errorText={errorText}
+                            />
+                          </View>
                         ),
                         frame: (
-                          <FrameSlide
-                            frameValue={frameValue}
-                            setFrameValue={setFrameValue}
-                            errorText={errorText}
-                          />
+                          <View>
+                            <FrameSlide
+                              frameValue={frameValue}
+                              setFrameValue={setFrameValue}
+                              errorText={errorText}
+                            />
+                          </View>
                         ),
                         weight: (
-                          <WeightSlide
-                            weightValue={weightValue}
-                            setWeightValue={setWeightValue}
-                            handleCalculate={handleCalculate}
-                            errorText={errorText}
-                          />
+                          <View>
+                            <WeightSlide
+                              weightValue={weightValue}
+                              setWeightValue={setWeightValue}
+                              handleCalculate={handleCalculate}
+                              errorText={errorText}
+                            />
+                          </View>
                         ),
                         result: (
-                          <ResultSlide
-                            genderValue={genderValue}
-                            frameValue={frameValue}
-                            weightValue={weightValue}
-                            heightValue={heightValue}
-                            ageValue={ageValue}
-                            idealWeight={idealWeight}
-                          />
+                          <View>
+                            <ResultSlide
+                              genderValue={genderValue}
+                              frameValue={frameValue}
+                              weightValue={weightValue}
+                              heightValue={heightValue}
+                              ageValue={ageValue}
+                              idealWeight={idealWeight}
+                            />
+                          </View>
                         ),
                       }[item.title]
                     }
                     {/* ************************************* */}
+                    <BottomHelp
+                      helpTitle={helpSlideValues[index].title}
+                      helpSubHeading={helpSlideValues[index].subHeading}
+                      helpText={helpSlideValues[index].text}
+                    ></BottomHelp>
                   </View>
-                  <BottomHelp
-                    helpTitle={helpSlideValues[index].title}
-                    helpSubHeading={helpSlideValues[index].subHeading}
-                    helpText={helpSlideValues[index].text}
-                    helpBackgroundColour={helpSlideValues[index].lightMuted}
-                  ></BottomHelp>
 
                   <BottomNavigation
                     validate={validate}
