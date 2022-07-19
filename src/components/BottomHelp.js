@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -5,10 +6,12 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import CustomBackground from "./CustomBackground";
 import { HeaderHandle } from "./HeaderHandle";
+import ColourContext from "../state/ColourContext";
+
 const { width, height } = Dimensions.get("screen");
 const ITEM_HEIGHT = height * 0.8;
 
@@ -22,18 +25,33 @@ const BottomHelp = ({ helpTitle, helpSubHeading, helpText }) => {
   //     width
   // );
   // console.log("helpSubHeading:" + helpSubHeading);
+
   /* snapPoints are the points where the bottom sheet can be pulled to
   e.g. 200 up, 500 up.
 
-  Now I changed the view to have a height of 926 - 740, so it's about 25% of the screen.  Therefore the snap points, which are height dependent would now be (approx) 220, 870, 170
+  I changed the view to have a height of 926 - 740, so it's about 25% of the screen.  Therefore the snap points, which are height dependent would now be (approx) 220, 870, 170
   snapPoints={[height - ITEM_HEIGHT, height - 70, ITEM_HEIGHT - 70]}
   The initialSnapIndex is which of the array of snap Points do you snap to 1st.  I have it set to 0 aka the 1st.
 */
+  const { colourData, index } = useContext(ColourContext);
 
-  const renderHeaderHandle = useCallback(
-    (props) => <HeaderHandle {...props} children="Custom Background" />,
-    []
-  );
+  useEffect(() => {
+    console.log(
+      "BottomHelp, useEffect, helpSubHeading:" +
+        helpSubHeading +
+        ", height:" +
+        height +
+        ", ITEM_HEIGHT:" +
+        ITEM_HEIGHT +
+        ", (height - ITEM_HEIGHT):" +
+        (height - ITEM_HEIGHT)
+    );
+  }, []);
+
+  // const renderHeaderHandle = useCallback(
+  //   (props) => <HeaderHandle {...props} children="Custom Background" />,
+  //   []
+  // );
 
   return (
     <BottomSheet
@@ -77,7 +95,7 @@ const BottomHelp = ({ helpTitle, helpSubHeading, helpText }) => {
         </Text>
         <Text style={{ fontSize: 16 }}>{helpSubHeading}</Text>
         <View style={{ marginVertical: 20 }}>
-          <Text style={{ marginVertical: 20 }}>{helpText}</Text>
+          <Text style={{ color: colourData[index].dominant }}>{helpText}</Text>
         </View>
       </BottomSheetScrollView>
     </BottomSheet>

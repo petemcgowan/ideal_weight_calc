@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from "react";
+import React, { useMemo, useContext, useEffect } from "react";
 import { BottomSheetBackgroundProps } from "@gorhom/bottom-sheet";
 import Animated, {
   useAnimatedStyle,
@@ -10,9 +10,17 @@ const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
   style,
   animatedIndex,
 }) => {
-  const { dominantColour, lightMutedColour } = useContext(ColourContext);
-  console.log("dominantColour:" + dominantColour);
-  console.log("lightMutedColour:" + lightMutedColour);
+  // const { dominantColour, lightMutedColour, lightVibrantColour } =
+  //   useContext(ColourContext);
+  const { colourData, index } = useContext(ColourContext);
+  // console.log("CustomBackground, dominantColour:" + dominantColour);
+  // console.log("CustomBackground,lightMutedColour:" + lightMutedColour);
+  // console.log("CustomBackground,lightVibrantColour:" + lightVibrantColour);
+
+  useEffect(() => {
+    console.log("CustomBackground, useEffect");
+    console.log(JSON.stringify(colourData[index]));
+  }, []);
 
   //#region styles
   const containerAnimatedStyle = useAnimatedStyle(() => ({
@@ -27,7 +35,8 @@ const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
       animatedIndex.value,
       [0, 1],
       // ["#ffffff", "#a8b5eb"]
-      ["#ffffff", lightMutedColour]
+      // [lightVibrantColour, lightMutedColour]
+      [colourData[index].lightVibrant, colourData[index].lightMuted]
     ),
   }));
   const containerStyle = useMemo(
@@ -37,7 +46,20 @@ const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
   //#endregion
 
   // render
-  return <Animated.View pointerEvents="none" style={containerStyle} />;
+  return (
+    <Animated.View
+      pointerEvents="none"
+      style={[
+        style,
+        {
+          backgroundColor: "white",
+          borderTopRightRadius: 5,
+          borderTopLeftRadius: 5,
+        },
+        containerAnimatedStyle,
+      ]}
+    />
+  );
 };
 
 export default CustomBackground;
